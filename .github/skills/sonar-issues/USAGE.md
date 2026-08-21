@@ -387,6 +387,7 @@ python .github/skills/sonar-issues/set_mode.py local                          # 
 python .github/skills/sonar-issues/set_mode.py github                         # hidden token prompt, org/repo from origin
 python .github/skills/sonar-issues/set_mode.py github --repo-url https://github.com/acme/report-service   # no checkout at all
 python .github/skills/sonar-issues/set_mode.py github --repo-url "https://github.com/acme/report-service/tree/feat-x"   # deep link: branch auto-saved as GITHUB_BRANCH; GHE hosts auto-derive the API URL
+python .github/skills/sonar-issues/set_mode.py github --repo-url acme/report-service --no-token   # "set the token later": saves mode/org/repo, status INCOMPLETE until the token is added
 python .github/skills/sonar-issues/set_mode.py github --api-url https://<ghe-host>/api/v3   # GitHub Enterprise
 python .github/skills/sonar-issues/set_mode.py --sonar-branch TASK-3487    # local: Sonar names the branch differently
 python .github/skills/sonar-issues/set_mode.py --show                         # verify; exit 2 = no mode chosen yet

@@ -220,6 +220,23 @@ class GateTests(unittest.TestCase):
         self.assertIn("GITHUB_ORG=acme", env)
         self.assertIn("GITHUB_REPO=report-service", env)
 
+    def test_06b_set_mode_github_no_token_skip_path(self):
+        # "[Skip - set it later]": agent-safe, never prompts, saves INCOMPLETE state
+        code, out = self.run_script(
+            "set_mode.py", "github",
+            "--repo-url", "https://github.com/acme/later-repo/tree/dev", "--no-token")
+        self.assertEqual(code, 0, out)
+        self.assertIn("--no-token", out)
+        with open(os.path.join(self.sk, ".env"), encoding="utf-8") as f:
+            env = f.read()
+        self.assertIn("GITHUB_REPO=later-repo", env)
+        self.assertIn("GITHUB_BRANCH=dev", env)
+        self.assertNotIn("GITHUB_TOKEN=", env.replace("GITHUB_TOKEN=\n", ""))
+        code, out = self.run_script("set_mode.py", "--show",
+                                    env_lines=["WORKFLOW_MODE=github",
+                                               "GITHUB_ORG=acme", "GITHUB_REPO=later-repo"])
+        self.assertIn("INCOMPLETE", out)
+
     def test_07_set_mode_local_never_touches_git(self):
         # no .git in tmp: local must refuse with the open-the-repo message
         code, out = self.run_script("set_mode.py", "local")

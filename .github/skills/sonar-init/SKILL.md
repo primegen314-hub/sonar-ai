@@ -52,15 +52,20 @@ Run `python .github/skills/sonar-issues/set_mode.py --show`.
     `SONAR_BRANCH`, then the current checkout. Fixes edit this checkout directly. If the
     script reports there is no git repository here, tell the user in one sentence to open
     the project repository folder and retry — do not offer a mode switch.
-  - **GitHub**: tell the user to run
-    `python .github/skills/sonar-issues/set_mode.py github` **in their own terminal** —
-    it derives org/repo from the git remote when one exists, otherwise asks them to paste
-    the GitHub repo URL (no checkout is ever required), and prompts for a GitHub token
-    with hidden input (needs WRITE access — publishing commits through the API). The
-    agent never handles or sees the token, same rule as `.env`. Wait for the user to
-    confirm, then re-check with `--show`. Any local checkout is IRRELEVANT from here on;
-    fixes go to a scratch workspace + `changes.patch`, pushed later with
-    `/publish-to-github`.
+  - **GitHub**: collect the repo reference (git remote when one exists, otherwise ask
+    for a pasted repo URL — a `/tree/<branch>` deep link works; no checkout is ever
+    required), then ask about the token (the ONLY extra info GitHub mode needs;
+    WRITE access — publishing commits through the API):
+    - `[Enter the token now] (Recommended) — run set_mode.py github in a terminal the
+      user can type into (use your run-in-terminal tool so the terminal takes focus;
+      hidden input). No interactive terminal? Print the command as a copy-paste block
+      and wait for the user to confirm.`
+    - `[Skip — set it later] — the agent runs set_mode.py github --repo-url <url>
+      --no-token itself: mode/org/repo/branch saved now, status INCOMPLETE; the token
+      is asked for only when extraction/publish actually needs it.`
+    The agent never handles or sees the token either way, same rule as `.env`.
+    Re-check with `--show`. Any local checkout is IRRELEVANT from here on; fixes go to
+    a scratch workspace + `changes.patch`, pushed later with `/publish-to-github`.
 
 ## Phase 3 — Extract
 

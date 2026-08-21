@@ -17,7 +17,7 @@ chosen yet - /sonar-init uses this to know when to ask).
 
 Usage:
   python set_mode.py local  [--sonar-branch NAME]
-  python set_mode.py github [--token TOKEN] [--org ORG] [--repo REPO]
+  python set_mode.py github [--token TOKEN | --no-token] [--org ORG] [--repo REPO]
                             [--repo-url URL] [--api-url URL] [--branch <analyzed-branch>]
   python set_mode.py --sonar-branch NAME     # local follow-up: Sonar names the branch differently
   python set_mode.py --show
@@ -166,7 +166,11 @@ def setup_github(args, env_path, env):
         print(f"[mode] GitHub Enterprise host detected -> GITHUB_API_URL={args.api_url}")
 
     token = args.token or env.get("GITHUB_TOKEN")
-    if not token:
+    if not token and args.no_token:
+        print("[mode] --no-token: saving mode/org/repo without a token (status will be "
+              "INCOMPLETE). Add it before extracting/publishing: run "
+              "'python set_mode.py github' in YOUR terminal (hidden prompt).")
+    elif not token:
         if sys.stdin.isatty():
             import getpass
             token = getpass.getpass(
@@ -228,6 +232,9 @@ def main():
     parser.add_argument("--sonar-branch", default=None,
                         help="local: the Sonar-side branch name when it differs from the git branch")
     parser.add_argument("--token", default=None, help="github: GitHub token (default: hidden prompt)")
+    parser.add_argument("--no-token", action="store_true",
+                        help="github: save mode/org/repo WITHOUT prompting for a token "
+                             "(set it later - status stays INCOMPLETE until then)")
     parser.add_argument("--org", default=None, help="github: GitHub org (default: parsed from origin or --repo-url)")
     parser.add_argument("--repo", default=None, help="github: GitHub repo (default: parsed from origin or --repo-url)")
     parser.add_argument("--repo-url", default=None,

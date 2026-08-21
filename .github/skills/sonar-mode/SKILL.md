@@ -34,11 +34,17 @@ apply the one mapped action; unlisted errors → show verbatim, ask the user.
    Then:
    - **→ Local**: run `python .github/skills/sonar-issues/set_mode.py local` (asks
      nothing; if there is no git repo here it says so — relay that one sentence).
-   - **→ GitHub**: tell the user to run
-     `python .github/skills/sonar-issues/set_mode.py github` **in their own terminal**
-     (hidden token prompt; a pasted repo URL — even a `/tree/<branch>` deep link —
-     works when there is no checkout; SSO orgs must authorize the token). The agent
-     never handles the token. Re-check with `--show` after they confirm.
+   - **→ GitHub**: first collect the repo reference if needed (git remote, or ask for a
+     pasted repo URL — a `/tree/<branch>` deep link works). Then ask about the token
+     (the ONLY extra thing GitHub mode needs; Local never asks any of this):
+     - `[Enter the token now] (Recommended) — run set_mode.py github in a terminal the
+       user can type into (use your run-in-terminal tool so the terminal takes focus;
+       the token prompt is hidden input). No interactive terminal available? Print the
+       command as a copy-paste block and wait.`
+     - `[Skip — set it later] — the agent runs set_mode.py github --repo-url <url>
+       --no-token itself: mode/org/repo/branch are saved now, status stays INCOMPLETE,
+       and extraction/publish will remind about the token when it's actually needed.`
+     The agent NEVER handles or sees the token either way. Re-check with `--show`.
 
 3. **Remind (always, after any switch)**: extracted trees belong to the mode they were
    extracted in — after switching, run `/sonar-init <sonar-url>` again before solving
