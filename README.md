@@ -21,6 +21,9 @@ you're ready.
 3. `/sonar-verify` — run the tests once, at the end (Local mode)
 4. Ship — `git push` in Local mode, `/publish-to-github` in GitHub mode
 
+(`/sonar-mode` shows or switches the Local | GitHub mode anytime — re-run `/sonar-init`
+after switching; progress survives.)
+
 Every solving session ends by listing exactly what is **still unresolved**, so on a
 300-issue project you always know what remains.
 

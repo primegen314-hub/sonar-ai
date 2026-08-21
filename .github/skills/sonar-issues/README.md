@@ -107,7 +107,7 @@ Full annotated key list: [.env.example](.env.example) — it is organized into
 
 ## Install in another repository (drop-in)
 
-1. Copy `.github/skills/` (this folder and the seven skill folders) into the target repo.
+1. Copy `.github/skills/` (this folder and the eight skill folders) into the target repo.
    Optionally copy `.claude/skills/` too for Claude Code (real dropdowns via AskUserQuestion).
 2. Add to that repo's `.gitignore`:
    ```

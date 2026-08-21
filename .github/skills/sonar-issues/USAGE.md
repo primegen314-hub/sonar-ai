@@ -48,7 +48,7 @@ persisted — never asked again) · copy `.claude/skills/` too if you use Claude
 
 # The skills — what you invoke, what gets asked, what to pick
 
-Seven skills drive the whole workflow (Claude Code shows real dropdowns via
+Eight skills drive the whole workflow (Claude Code shows real dropdowns via
 AskUserQuestion; Copilot chat has no dropdown UI, so the same options render as a strict
 numbered menu — you answer with just a number). Each skill announces its phases as it
 works ("issue 3/12") so you always see where it is. Every fix ends with a mandatory
@@ -102,6 +102,12 @@ by pointing you at `/sonar-verify` (local) or `/publish-to-github` (GitHub mode)
 
 Same phantom-fix guard and hand-off as `/sonar-issues-solve` — no tests run here;
 verify with `/sonar-verify` when you're done picking issues.
+
+## `/sonar-mode [local | github]` — show or switch the workflow mode
+
+Shows `set_mode.py --show` output; switching to Local runs the script directly (asks
+nothing), switching to GitHub sends you to your own terminal for the hidden token
+prompt. Always reminds you to re-run `/sonar-init` after a switch (progress survives).
 
 ## `/sonar-batch-fix <subset>` — fix a chosen chunk (large projects)
 
