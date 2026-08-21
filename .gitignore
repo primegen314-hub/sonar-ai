@@ -1,0 +1,21 @@
+# sonar-issues pipeline output (may contain private source excerpts)
+SONAR_ISSUES/
+
+# secrets
+.env
+*.token
+*.pat
+
+# build artifacts
+*.zip
+
+# python
+__pycache__/
+*.pyc
+
+# internal reference screenshots - do not publish
+image-ref/
+
+# screenshots / internal reference material - never publish
+imageRef/
+image-ref/

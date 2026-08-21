@@ -1,0 +1,59 @@
+{
+  "java:S1068": {
+    "rule": {
+      "key": "java:S1068",
+      "name": "Unused \"private\" fields should be removed",
+      "lang": "java",
+      "langName": "Java",
+      "type": "CODE_SMELL",
+      "descriptionSections": [
+        {
+          "key": "root_cause",
+          "content": "<p>If a <code>private</code> field is declared but not used locally, it is dead code and should be removed. This helps maintainability because developers will not wonder what the field is used for.</p>"
+        },
+        {
+          "key": "how_to_fix",
+          "content": "<p>Remove the unused field, or if it is assigned by a framework (e.g. dependency injection), use it or mark it appropriately.</p><h4>Noncompliant code example</h4><pre>public class MyClass {\n  private int foo = 42;  // Noncompliant: foo is unused\n}</pre><h4>Compliant solution</h4><pre>public class MyClass {\n}</pre>"
+        }
+      ]
+    }
+  },
+  "java:S1481": {
+    "rule": {
+      "key": "java:S1481",
+      "name": "Unused local variables should be removed",
+      "lang": "java",
+      "langName": "Java",
+      "type": "CODE_SMELL",
+      "descriptionSections": [
+        {
+          "key": "root_cause",
+          "content": "<p>An unused local variable is dead code. It clutters the method, confuses readers, and can hide bugs where the wrong variable is used instead.</p>"
+        },
+        {
+          "key": "how_to_fix",
+          "content": "<p>Remove the declaration of the unused variable.</p><h4>Noncompliant code example</h4><pre>int total = 0;  // Noncompliant: never read\nreturn rows.size();</pre><h4>Compliant solution</h4><pre>return rows.size();</pre>"
+        }
+      ]
+    }
+  },
+  "java:S2095": {
+    "rule": {
+      "key": "java:S2095",
+      "name": "Resources should be closed",
+      "lang": "java",
+      "langName": "Java",
+      "type": "BUG",
+      "descriptionSections": [
+        {
+          "key": "root_cause",
+          "content": "<p>Connections, streams, files, and other classes that implement <code>Closeable</code> or <code>AutoCloseable</code> need to be closed after use. Failing to do so leaks resources and can exhaust file handles under load.</p>"
+        },
+        {
+          "key": "how_to_fix",
+          "content": "<p>Use the try-with-resources statement so the resource is closed automatically.</p><h4>Noncompliant code example</h4><pre>FileInputStream in = new FileInputStream(path); // Noncompliant\nbyte[] data = in.readAllBytes();\nreturn data;</pre><h4>Compliant solution</h4><pre>try (FileInputStream in = new FileInputStream(path)) {\n  return in.readAllBytes();\n}</pre>"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "paging": { "pageIndex": 1, "pageSize": 500, "total": 3 },
+  "issues": [
+    {
+      "key": "AY8xfixture0001",
+      "rule": "java:S1068",
+      "severity": "MAJOR",
+      "component": "example_report-service:src/main/java/com/example/report/ReportService.java",
+      "project": "example_report-service",
+      "line": 12,
+      "textRange": { "startLine": 12, "endLine": 12, "startOffset": 4, "endOffset": 46 },
+      "message": "Remove this unused 'translateService' private field or make it 'readonly'.",
+      "effort": "5min",
+      "debt": "5min",
+      "status": "OPEN",
+      "issueStatus": "OPEN",
+      "type": "CODE_SMELL",
+      "cleanCodeAttribute": "COMPLETE",
+      "impacts": [ { "softwareQuality": "MAINTAINABILITY", "severity": "MEDIUM" } ],
+      "tags": [ "unused" ],
+      "creationDate": "2026-08-10T09:15:00+0000"
+    },
+    {
+      "key": "AY8xfixture0002",
+      "rule": "java:S1481",
+      "severity": "MINOR",
+      "component": "example_report-service:src/main/java/com/example/report/ReportService.java",
+      "project": "example_report-service",
+      "line": 21,
+      "textRange": { "startLine": 21, "endLine": 21, "startOffset": 12, "endOffset": 17 },
+      "message": "Remove this unused \u0027total\u0027 local variable.",
+      "effort": "5min",
+      "debt": "5min",
+      "status": "CONFIRMED",
+      "issueStatus": "CONFIRMED",
+      "type": "CODE_SMELL",
+      "cleanCodeAttribute": "CLEAR",
+      "impacts": [ { "softwareQuality": "MAINTAINABILITY", "severity": "LOW" } ],
+      "tags": [ "unused" ],
+      "creationDate": "2026-08-11T14:02:00+0000"
+    },
+    {
+      "key": "AY8xfixture0003",
+      "rule": "java:S2095",
+      "severity": "BLOCKER",
+      "component": "example_report-service:src/main/java/com/example/report/ReportService.java",
+      "project": "example_report-service",
+      "line": 26,
+      "textRange": { "startLine": 26, "endLine": 26, "startOffset": 8, "endOffset": 55 },
+      "message": "Use try-with-resources or close this \u0027FileInputStream\u0027 in a \u0022finally\u0022 clause.",
+      "effort": "10min",
+      "debt": "10min",
+      "status": "OPEN",
+      "issueStatus": "OPEN",
+      "type": "BUG",
+      "cleanCodeAttribute": "COMPLETE",
+      "impacts": [ { "softwareQuality": "RELIABILITY", "severity": "HIGH" } ],
+      "tags": [ "cwe", "leak" ],
+      "creationDate": "2026-08-12T08:40:00+0000"
+    }
+  ],
+  "components": [
+    {
+      "key": "example_report-service:src/main/java/com/example/report/ReportService.java",
+      "qualifier": "FIL",
+      "name": "ReportService.java",
+      "path": "src/main/java/com/example/report/ReportService.java"
+    },
+    {
+      "key": "example_report-service",
+      "qualifier": "TRK",
+      "name": "report-service"
+    }
+  ],
+  "rules": [
+    { "key": "java:S1068", "name": "Unused \"private\" fields should be removed", "lang": "java" },
+    { "key": "java:S1481", "name": "Unused local variables should be removed", "lang": "java" },
+    { "key": "java:S2095", "name": "Resources should be closed", "lang": "java" }
+  ]
+}
