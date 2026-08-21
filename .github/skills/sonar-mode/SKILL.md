@@ -38,8 +38,10 @@ apply the one mapped action; unlisted errors → show verbatim, ask the user.
      pasted repo URL — a `/tree/<branch>` deep link works). Then ask about the token
      (the ONLY extra thing GitHub mode needs; Local never asks any of this):
      - `[Enter the token now] (Recommended) — run set_mode.py github in a terminal the
-       user can type into (use your run-in-terminal tool so the terminal takes focus;
-       the token prompt is hidden input). No interactive terminal available? Print the
+       user can type into (use your run-in-terminal tool so the terminal opens and takes
+       focus). The token prompt hides input like a password — tell the user beforehand:
+       "the terminal will take focus; nothing appears as you type or paste the token —
+       that's normal, just press Enter". No interactive terminal available? Print the
        command as a copy-paste block and wait.`
      - `[Skip — set it later] — the agent runs set_mode.py github --repo-url <url>
        --no-token itself: mode/org/repo/branch are saved now, status stays INCOMPLETE,

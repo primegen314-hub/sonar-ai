@@ -57,9 +57,11 @@ Run `python .github/skills/sonar-issues/set_mode.py --show`.
     required), then ask about the token (the ONLY extra info GitHub mode needs;
     WRITE access — publishing commits through the API):
     - `[Enter the token now] (Recommended) — run set_mode.py github in a terminal the
-      user can type into (use your run-in-terminal tool so the terminal takes focus;
-      hidden input). No interactive terminal? Print the command as a copy-paste block
-      and wait for the user to confirm.`
+      user can type into (use your run-in-terminal tool so the terminal opens and takes
+      focus). The token prompt hides input like a password — tell the user beforehand:
+      "the terminal will take focus; nothing appears as you type or paste the token —
+      that's normal, just press Enter". No interactive terminal? Print the command as a
+      copy-paste block and wait for the user to confirm.`
     - `[Skip — set it later] — the agent runs set_mode.py github --repo-url <url>
       --no-token itself: mode/org/repo/branch saved now, status INCOMPLETE; the token
       is asked for only when extraction/publish actually needs it.`

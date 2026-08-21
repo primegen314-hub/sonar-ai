@@ -173,9 +173,11 @@ def setup_github(args, env_path, env):
     elif not token:
         if sys.stdin.isatty():
             import getpass
-            token = getpass.getpass(
-                "[mode] GitHub token (hidden - needs WRITE access to the repo for publishing; "
-                "or Ctrl+C and paste it into .env as GITHUB_TOKEN yourself): ").strip()
+            print("[mode] GitHub token needed (WRITE access - publishing commits through the API).")
+            print("[mode] The input below is HIDDEN like a password: nothing appears as you")
+            print("[mode] type or paste (right-click / Ctrl+Shift+V pastes) - that is normal.")
+            print("[mode] Press Enter when done, or Ctrl+C to abort and paste it into .env yourself.")
+            token = getpass.getpass("[mode] Token: ").strip()
         else:
             warn("No terminal to prompt for the token - leaving GITHUB_TOKEN empty. "
                  f"Paste it into {env_path} manually.")
