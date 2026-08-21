@@ -42,7 +42,8 @@ report.
    question (these are all `normal` by selection).
 
 4. **Report** — re-run `--list`, then TWO groups:
-   - **fixed** (the cleared quick wins)
+   - **fixed** (the cleared quick wins) — one brief line per issue:
+     `<ruleId> · <folder> — <what was done>` (each `resolution.json` reason)
    - **left for you** — every remaining unresolved issue with its `--list` line
      (severity, rec:, eff:), so the user knows exactly what was NOT solved and why it
      needs more attention (higher tier, `rec:ai`, or a skip reason).

@@ -186,13 +186,15 @@ runs tests:
    `{"status": "fixed"|"skipped", "reason": "...", "filesChanged": [...], "testsRun": [],
    "mode": "local"|"github"}` — in GitHub mode add
    `"workspaceFiles": [...], "patchFile": "changes.patch"`. (`testsRun` stays empty
-   here; `/sonar-verify` fills it later.)
+   here; `/sonar-verify` fills it later.) **For `fixed`, `reason` MUST be a one-line
+   summary of what was actually done** — it becomes the fix's brief in the report.
    Then offer: `[keep the issue folder] (Recommended)` or `[delete this issue's folder]` —
    progress stays tracked either way (a missing folder counts as `removed`/resolved);
    deleting loses only the audit trail.
 
-9. **Report** what changed and link the issue's `sonarUrl` so the user can see it in
-   Sonar. Close with the hand-off:
+9. **Report** with the fix's brief line — `<ruleId> · <folder> — <what was done>` (the
+   resolution reason) — plus the issue's `sonarUrl` so the user can see it in Sonar.
+   Close with the hand-off:
    - Local mode: "the fix is applied but untested — run `/sonar-verify` whenever you're
      ready (recommended: after you've solved all the issues you plan to)."
    - GitHub mode: "the fix is only in the workspace until `/publish-to-github` pushes it;

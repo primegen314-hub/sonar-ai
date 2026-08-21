@@ -186,7 +186,10 @@ instruction files it found (CLAUDE.md, .github/copilot-instructions.md, AGENTS.m
      `{"status": "fixed"|"skipped", "reason": "...", "filesChanged": [...], "testsRun": [],
      "mode": "local"|"github"}` — in GitHub mode add
      `"workspaceFiles": [...], "patchFile": "changes.patch"`. (`testsRun` stays empty
-     here; `/sonar-verify` fills it later.)
+     here; `/sonar-verify` fills it later.) **For `fixed`, `reason` MUST be a one-line
+     summary of what was actually done** (e.g. "wrapped FileInputStream in
+     try-with-resources", "extracted 2 guard clauses to cut nesting") — it becomes the
+     fix's brief in the final report.
    - Then offer: `[keep the issue folder] (Recommended)` or `[delete this issue's folder]`
      (progress stays tracked — a missing folder counts as `removed`/resolved; deleting
      loses only the audit trail).
@@ -201,10 +204,12 @@ instruction files it found (CLAUDE.md, .github/copilot-instructions.md, AGENTS.m
      record `resolution.json` as `skipped` with the reason, continue.
 
 6. **Report**: re-run `--list`; present THREE groups so nothing is invisible —
-   **fixed**, **skipped** (each with its recorded reason), and **still unresolved**
-   (count + their `--list` lines), so the user always knows exactly which issues were
-   NOT solved. Remind the user Sonar clears the issues only after the branch is
-   re-analyzed (CI).
+   **fixed** (one brief line per issue: `<ruleId> · <folder> — <what was done>`, from
+   each `resolution.json` reason, e.g.
+   `S3776 · 007_S3776_ReportService.java_L88 — extracted 2 guard clauses to cut nesting`),
+   **skipped** (each with its recorded reason), and **still unresolved** (count + their
+   `--list` lines), so the user always knows exactly which issues were NOT solved.
+   Remind the user Sonar clears the issues only after the branch is re-analyzed (CI).
 
 7. **Hand-off** (never skip this message):
    - **Local mode**: "All fixes are applied to your checkout but UNTESTED — run

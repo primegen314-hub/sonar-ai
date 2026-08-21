@@ -51,7 +51,8 @@ has one, marking each completed; else one-line statuses)
    batch".
 
 5. **Report** — re-run `--list`, then present THREE groups so nothing is invisible:
-   - **fixed** (this batch)
+   - **fixed** (this batch) — one brief line per issue:
+     `<ruleId> · <folder> — <what was done>` (each `resolution.json` reason)
    - **skipped** (this batch, each with its recorded reason)
    - **still unresolved** (everything outside the batch or left over) — count + the
      `--list` lines, so the user always knows exactly which issues remain.
