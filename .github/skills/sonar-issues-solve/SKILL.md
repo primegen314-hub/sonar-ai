@@ -104,16 +104,17 @@ instruction files it found (CLAUDE.md, .github/copilot-instructions.md, AGENTS.m
 The user can feed reference material at ANY point in the session, with or without
 instruction files present, in any form: a pasted "perfect snapshot" class,
 comma-separated repo file names (max 3 — code OR skill/doc files alike, e.g.
-`aggrid-migration.md, GridComponent.ts`), framework skills/docs/examples (e.g. Angular
-reference components), or plain domain notes ("we use standalone components, signals
-over RxJS where possible"). Typical high-value feed: a migration/upgrade skill that
-maps deprecated APIs to their replacements — fixes must then use the replacement,
-never the deprecated call, whenever they touch that library. Treat supplied material
-as authoritative for the REST of the session, on two levels:
+`<migration-skill>.md, <ReferenceClass>.<ext>`), skills/docs/examples for ANY
+framework, library, or technology the project uses, or plain domain notes. Typical
+high-value feed: a migration/upgrade skill that maps deprecated APIs to their
+replacements — fixes must then use the replacement, never the deprecated call,
+whenever they touch that library. Treat supplied material as authoritative for the
+REST of the session, on two levels:
 - **Style**: naming, logging, error handling, formatting, idioms — every fix matches it.
-- **Implementation**: which framework APIs and patterns fixes should use — when the
-  reference shows how this team writes (say) Angular, fixes follow that way, not your
-  generic training default.
+- **Implementation**: which APIs and patterns fixes should use — when the reference
+  shows how this team uses a framework/library/technology, fixes follow that way, not
+  your generic training default. This applies to WHATEVER technology the reference
+  covers; never assume it is limited to the examples you have seen before.
 Priority on conflict: **user reference > found rules files > your defaults.** At a
 natural pause, offer `[Merge the distilled guidance into instructions.md]` so it
 becomes permanent (conventions/guidance only, never their code verbatim). Never ignore
