@@ -95,8 +95,11 @@ applying any fix:
 ## User-supplied reference & rich context (anytime — highest priority)
 
 The user can feed reference material at ANY point, with or without instruction files
-present: a pasted "perfect snapshot" class, comma-separated repo files (max 3),
-framework skills/docs/examples, or plain domain notes. Authoritative for the session on
+present: a pasted "perfect snapshot" class, comma-separated repo files (max 3 — code OR
+skill/doc files alike, e.g. `aggrid-migration.md, GridComponent.ts`), framework
+skills/docs/examples, or plain domain notes. Typical high-value feed: a
+migration/upgrade skill mapping deprecated APIs to replacements — fixes must use the
+replacement, never the deprecated call. Authoritative for the session on
 BOTH levels — **style** (naming, logging, error handling, idioms) and **implementation**
 (which framework APIs/patterns the fix should use). Priority on conflict:
 **user reference > found rules files > your defaults.** Offer to merge the distilled
