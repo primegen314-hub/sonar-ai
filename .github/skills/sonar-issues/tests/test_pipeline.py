@@ -10,6 +10,7 @@ Two layers:
     isolated temp copy (no network, no credentials, never touches the repo's
     own .env or SONAR_ISSUES/)
 """
+import json
 import os
 import shutil
 import subprocess
@@ -191,6 +192,37 @@ class GateTests(unittest.TestCase):
                        "GITHUB_ORG=x", "GITHUB_REPO=y"])
         self.assertEqual(code, 0, out)
         self.assertIn("mode     : github", out)
+
+    def test_02c_stats_report_and_attack_plan(self):
+        # fixtures tree (from test_01): S1068+S1481 are rec:sonar/eff:normal
+        # (quick-wins slice), S2095 is the hard tail - no cluster reaches 3
+        code, out = self.run_script("pick_issue.py", "--stats", "--fixtures",
+                                    "--branch", "demo")
+        self.assertEqual(code, 0, out)
+        self.assertIn("unresolved: 3/3", out)
+        self.assertIn("by rule:", out)
+        self.assertIn("S1481", out)
+        self.assertIn("attack plan", out)
+        self.assertIn("/sonar-quick-wins", out)
+        self.assertIn("2 mechanical issue(s)", out)
+        self.assertIn("/sonar-issue-pick", out)
+        self.assertIn("/sonar-verify", out)
+        # resolved issues drop out of every count (clean up so later tests
+        # still see an untouched demo tree)
+        demo = os.path.join(self.tmp, "SONAR_ISSUES", "demo")
+        folder = next(f for f in os.listdir(demo) if "S1481" in f)
+        res_path = os.path.join(demo, folder, "resolution.json")
+        with open(res_path, "w", encoding="utf-8") as f:
+            json.dump({"status": "fixed", "reason": "x", "filesChanged": [],
+                       "testsRun": [], "mode": "local"}, f)
+        try:
+            code, out = self.run_script("pick_issue.py", "--stats", "--fixtures",
+                                        "--branch", "demo")
+            self.assertEqual(code, 0, out)
+            self.assertIn("unresolved: 2/3", out)
+            self.assertNotIn("S1481", out)
+        finally:
+            os.remove(res_path)
 
     def test_03_verify_refuses_in_github_mode_exit_4(self):
         code, out = self.run_script("verify.py", "--issue", "2", "--branch", "demo-r",

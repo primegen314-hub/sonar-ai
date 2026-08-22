@@ -32,6 +32,7 @@ Everything lives in the canonical home **[.github/skills/sonar-issues/](.github/
 | Doc | What's inside |
 |---|---|
 | [README](.github/skills/sonar-issues/README.md) | how to run it, what you need per mode, install, security |
+| [USECASE.md](USECASE.md) | the 200+-issue legacy-backlog playbook — report, attack plan, chunking rhythm |
 | [FLOWS.md](.github/skills/sonar-issues/FLOWS.md) | diagrams — the whole journey, every dropdown, per-skill flows |
 | [USAGE.md](.github/skills/sonar-issues/USAGE.md) | per-script runbook with real output |
 | [CONTEXT.md](CONTEXT.md) | the project's ubiquitous language |

@@ -305,10 +305,29 @@ python .github/skills/sonar-issues/run_all.py --fixtures --branch demo    # offl
 
 ## pick_issue.py — list issues / locate one (used by the solving skills)
 
-Extra flags beyond the common ones: `--list`, `--next`, `--branches` (every extracted
-branch tree with resolved counts — how the skills disambiguate when several branches
-exist), or a positional *selector* (sequence number, folder-name prefix, or Sonar issue key).
+Extra flags beyond the common ones: `--list`, `--stats`, `--next`, `--branches` (every
+extracted branch tree with resolved counts — how the skills disambiguate when several
+branches exist), or a positional *selector* (sequence number, folder-name prefix, or
+Sonar issue key).
 Exit codes: `0` found · `1` error · `2` `--next` found nothing (all resolved).
+
+`--stats` is the big-backlog report: unresolved issues grouped by rule, plus a
+deterministic **attack plan** (quick wins → same-rule batches → hard tail by severity)
+that the solving skills present verbatim on trees with 20+ unresolved issues — see
+[USECASE.md](../../../USECASE.md) for the full 200+-issue walkthrough:
+
+```text
+$ python .github/skills/sonar-issues/pick_issue.py --stats --branch demo
+branch: demo | project: example_report-service | mode: local | unresolved: 3/3
+by rule:
+  S1068      x1    sev MAJOR:1 | rec sonar:1 | eff normal:1 | Remove this unused 'translateService' private field or ma...
+  S1481      x1    sev MINOR:1 | rec sonar:1 | eff normal:1 | Remove this unused 'total' local variable.
+  S2095      x1    sev BLOCKER:1 | rec sonar:1 | eff high:1 | Use try-with-resources or close this 'FileInputStream' in...
+attack plan (fastest correct order - verify + commit between steps):
+  1. /sonar-quick-wins                  - 2 mechanical issue(s) (rec:sonar + eff:normal) in one automated pass
+  2. hard tail - 1 issue(s) one at a time, highest severity first: /sonar-issue-pick <seq> in this order: 3
+between steps: quick gate with /sonar-verify (--compile) and commit/publish the chunk.
+```
 
 ```text
 $ python .github/skills/sonar-issues/pick_issue.py --list --branch demo

@@ -41,6 +41,12 @@ has one, marking each completed; else one-line statuses)
      reported ("no match: <x>") and the rest continue — never guess.
    - Show the resolved batch ("N issues selected: ...") before fixing. Empty batch →
      say so and stop.
+   - **No `<subset>` argument given** → never ask in prose what to fix. Run
+     `pick_issue.py --stats --branch <branchRef>` and present its pre-computed attack
+     plan as the choice menu: each plan step becomes one option (its command + issue
+     count as the description), the first step marked `(Recommended)`, plus
+     `[Name my own subset]` last. The chosen step's rule id / seq list IS the subset —
+     continue with step 3.
 
 3. **Session choices** — as in sonar-issues-solve steps 3 + 3b. `[automated]` is
    recommended when the batch is mostly `rec:sonar` + `eff:normal`/`high`; when the

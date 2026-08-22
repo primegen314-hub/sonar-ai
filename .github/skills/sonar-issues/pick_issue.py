@@ -5,6 +5,7 @@ folder names, ask this script.
 
 Usage:
   python pick_issue.py --list            [--branch NAME]   all issues + solve status
+  python pick_issue.py --stats           [--branch NAME]   unresolved by rule + attack plan
   python pick_issue.py 3                 [--branch NAME]   by sequence number
   python pick_issue.py 003_S1481_Repo... [--branch NAME]   by folder name (prefix ok)
   python pick_issue.py AY8xKEY           [--branch NAME]   by Sonar issue key
@@ -100,6 +101,74 @@ def load_summary(settings):
         return json.load(f)
 
 
+SEVERITY_RANK = {"BLOCKER": 0, "CRITICAL": 1, "MAJOR": 2, "MINOR": 3, "INFO": 4}
+
+
+def _tally(items, field):
+    """'MAJOR:40 MINOR:2' - counts of a field across items, biggest first."""
+    counts = {}
+    for item in items:
+        value = item.get(field) or "-"
+        counts[value] = counts.get(value, 0) + 1
+    return " ".join(f"{k}:{v}" for k, v in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0])))
+
+
+def print_stats(settings, summary, entries, mode):
+    """Unresolved issues grouped by rule, then a deterministic attack plan:
+    quick wins -> same-rule batches -> hard tail. The solving skills present
+    this plan verbatim so no model has to re-derive it."""
+    pending = [e for e in entries
+               if resolution_status(settings.branch_dir, e["folder"])
+               not in ("fixed", "skipped", "removed")]
+    print(f"branch: {summary['branchRef']} | project: {summary['project']} "
+          f"| mode: {mode} | unresolved: {len(pending)}/{len(entries)}")
+    if not pending:
+        print("All issues are resolved - nothing to plan.")
+        return
+
+    by_rule = {}
+    for e in pending:
+        by_rule.setdefault(e.get("ruleId") or "?", []).append(e)
+    ordered = sorted(by_rule.items(), key=lambda kv: (-len(kv[1]), kv[0]))
+    print("by rule:")
+    for rule_id, items in ordered:
+        msg = items[0]["message"]
+        msg = msg if len(msg) <= 60 else msg[:57] + "..."
+        print(f"  {rule_id:10s} x{len(items):<4d}"
+              f" sev {_tally(items, 'severity')} | rec {_tally(items, 'recommended')}"
+              f" | eff {_tally(items, 'aiEffort')} | {msg}")
+
+    quick = [e for e in pending
+             if e.get("recommended") == "sonar" and e.get("aiEffort") == "normal"]
+    quick_seqs = {e["seq"] for e in quick}
+    rest = [e for e in pending if e["seq"] not in quick_seqs]
+    rest_by_rule = {}
+    for e in rest:
+        rest_by_rule.setdefault(e.get("ruleId") or "?", []).append(e)
+    clusters = sorted(((r, items) for r, items in rest_by_rule.items() if len(items) >= 3),
+                      key=lambda kv: (-len(kv[1]), kv[0]))
+    clustered_seqs = {e["seq"] for _, items in clusters for e in items}
+    tail = sorted((e for e in rest if e["seq"] not in clustered_seqs),
+                  key=lambda e: (SEVERITY_RANK.get(e.get("severity"), 9), e["seq"]))
+
+    print("attack plan (fastest correct order - verify + commit between steps):")
+    step = 1
+    if quick:
+        print(f"  {step}. /sonar-quick-wins                  "
+              f"- {len(quick)} mechanical issue(s) (rec:sonar + eff:normal) in one automated pass")
+        step += 1
+    for rule_id, items in clusters:
+        effs = _tally(items, "aiEffort")
+        print(f"  {step}. /sonar-batch-fix {rule_id:14s}  "
+              f"- {len(items)} issue(s), same rule ({effs}) - one chunk, one review")
+        step += 1
+    if tail:
+        order = ", ".join(str(e["seq"]) for e in tail)
+        print(f"  {step}. hard tail - {len(tail)} issue(s) one at a time, highest severity "
+              f"first: /sonar-issue-pick <seq> in this order: {order}")
+    print("between steps: quick gate with /sonar-verify (--compile) and commit/publish the chunk.")
+
+
 def print_issue(settings, entry, status, mode="local"):
     folder_path = os.path.join(settings.branch_dir, entry["folder"])
     print(f"seq     : {entry['seq']}")
@@ -137,6 +206,8 @@ def main():
                         help="sequence number, folder name (prefix), or Sonar issue key")
     parser.add_argument("--branch", default=None, help="branch ref (default: current git branch)")
     parser.add_argument("--list", action="store_true", help="list every issue with solve status")
+    parser.add_argument("--stats", action="store_true",
+                        help="unresolved issues grouped by rule + a suggested attack plan")
     parser.add_argument("--next", action="store_true", help="print the first unresolved issue")
     parser.add_argument("--branches", action="store_true",
                         help="list every extracted branch tree under SONAR_ISSUES/")
@@ -156,6 +227,10 @@ def main():
     summary = load_summary(settings)
     entries = summary.get("issues", [])
     mode = normalize_mode(summary.get("workflowMode", "local"))
+
+    if args.stats:
+        print_stats(settings, summary, entries, mode)
+        return
 
     if args.list:
         done = 0
