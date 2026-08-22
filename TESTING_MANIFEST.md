@@ -105,7 +105,7 @@ always safe.
 | E13 | ☐ `/sonar-verify` offers cleanup | run a passing `--full` verify in local mode | After PASSED it offers `[keep] (Recommended when issues remain)` / `[cleanup]`; scoped runs and failures never offer it |
 | E14 | ☐ Honesty rule | watch any fix report/hand-off, especially on a smaller model | The AI never claims a fix "works"/"compiles"/"is correct" — only "edit applied" (with diff) and, after `/sonar-verify`, its actual result; hand-off suggests the quick compile check |
 | E15 | ☐ Anytime reference | with rules files PRESENT, paste a reference class mid-session | The AI extracts and follows its conventions for the session (reference wins on conflict) and offers to merge into `instructions.md` — no re-asking later |
-| E16 | ☐ Attack plan on big backlogs | `/sonar-issues-solve` on a tree with >20 unresolved; `/sonar-batch-fix` with no subset | The AI runs `--stats` and presents the script's attack plan verbatim as the first choice menu (`[Follow the attack plan]` recommended) — it never re-derives or reorders the plan itself |
+| E16 | ☐ `/sonar-attack-plan` | run it after init on a mixed tree | Shows the `--stats` report verbatim (never re-derived/reordered) + ONE menu: `[Start step 1] (Recommended)` / `[Just wanted the report]`; read-only — nothing fixed unless the user starts a step; the other skills are unchanged and never invoke or push it |
 
 ## F. Docs sanity — 🖐 manual, 2 minutes
 

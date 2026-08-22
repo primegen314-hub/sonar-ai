@@ -148,21 +148,6 @@ or "balance away" supplied reference material — the user feeding context is th
 
 2. **Show the plan**: `python .github/skills/sonar-issues/pick_issue.py --list --branch <branchRef>`.
 
-2b. **Large backlog → present the attack plan first** (mandatory when the list shows
-   more than 20 unresolved issues; optional below that): run
-   `python .github/skills/sonar-issues/pick_issue.py --stats --branch <branchRef>` —
-   it prints the unresolved issues grouped by rule AND a pre-computed attack plan
-   (quick wins → same-rule batches → hard tail by severity). Present that plan
-   verbatim as the session's first choice — do NOT re-derive or reorder it yourself:
-   `[Follow the attack plan — start with its step 1] (Recommended — fastest correct
-   order: mechanical passes first, complicated issues get individual attention)` ·
-   `[Pick a subset myself]` (→ `/sonar-batch-fix`) · `[Solve everything in this one
-   session anyway]`. Following the plan means running its steps' commands
-   (`/sonar-quick-wins`, `/sonar-batch-fix <rule>`, `/sonar-issue-pick <seq>`) in
-   order, with the verify + commit/publish gate between steps that the plan's last
-   line names. You may enrich the presentation with one line of context per step,
-   but the step order and contents come from the script.
-
 3. **Ask the mode**: `[interactive]` (confirm each issue) or `[automated]` (fix everything,
    report at the end). **Which to mark (Recommended) depends on the list**: mostly
    `rec:sonar` + `eff:normal`/`high` → `[automated]` is recommended; but when the

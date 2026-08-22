@@ -14,6 +14,7 @@ you're ready.
 ## The fast path
 
 1. `/sonar-init <sonar-url>` — one-time setup (Local | GitHub choice) + extract all issues
+   (big backlog? `/sonar-attack-plan` shows it grouped by rule with a suggested order)
 2. Fix — pick the right tool for the backlog size:
    - `/sonar-quick-wins` — auto-clear the easy majority (rec:sonar + low effort)
    - `/sonar-batch-fix 7-40` — a chosen chunk (selectors, ranges, a rule id, a severity)

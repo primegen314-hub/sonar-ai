@@ -31,8 +31,10 @@ automatically.
 ## Step 2 — Get the report and the attack plan
 
 ```bash
-python .github/skills/sonar-issues/pick_issue.py --stats
+/sonar-attack-plan
 ```
+
+(or run the script directly: `python .github/skills/sonar-issues/pick_issue.py --stats`)
 
 ```
 branch: TASK-3487-report-cleanup | project: report-service | mode: local | unresolved: 240/240
@@ -49,8 +51,11 @@ attack plan (fastest correct order - verify + commit between steps):
 between steps: quick gate with /sonar-verify (--compile) and commit/publish the chunk.
 ```
 
-The plan is computed deterministically from the extracted data — the AI presents
-it, you approve it. Any agent, weak or strong, gets the same plan.
+The plan is computed deterministically from the extracted data — the AI only
+presents it, so any agent, weak or strong, shows the same plan. It is a
+suggestion, never imposed: the skill offers `[Start step 1 now]` or
+`[Just wanted the report]`, and every plan line is a copy-paste command you can
+run yourself whenever you like.
 
 ## Step 3 — Quick wins first (usually 40–60% of a legacy backlog)
 
