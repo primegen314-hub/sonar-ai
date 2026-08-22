@@ -135,7 +135,12 @@ to merge the distilled conventions into `instructions.md`.
 2. **Show the plan**: `python .github/skills/sonar-issues/pick_issue.py --list --branch <branchRef>`.
 
 3. **Ask the mode**: `[interactive]` (confirm each issue) or `[automated]` (fix everything,
-   report at the end).
+   report at the end). **Which to mark (Recommended) depends on the list**: mostly
+   `rec:sonar` + `eff:normal`/`high` → `[automated]` is recommended; but when the
+   unresolved list contains `eff:max`/`xMax` issues or is mostly `rec:ai` →
+   recommend `[interactive]` and say why ("N complicated issues — better confirmed one
+   by one; or clear the easy ones first with /sonar-quick-wins"). Complicated issues
+   deserve eyes, not a hands-off pass.
 
 3b. **Ask the AI effort ONCE for the whole session**: `[normal | high | max | xMax]`,
    recommended tier first — it is pre-computed on the `--list` footer

@@ -42,9 +42,12 @@ has one, marking each completed; else one-line statuses)
    - Show the resolved batch ("N issues selected: ...") before fixing. Empty batch →
      say so and stop.
 
-3. **Session choices** — as in sonar-issues-solve steps 3 + 3b, with
-   `[automated] (Recommended — this is a batch tool)` listed first, then the effort
-   tier ONCE (recommended from the `--list` footer).
+3. **Session choices** — as in sonar-issues-solve steps 3 + 3b. `[automated]` is
+   recommended when the batch is mostly `rec:sonar` + `eff:normal`/`high`; when the
+   batch contains `eff:max`/`xMax` issues or is mostly `rec:ai`, recommend
+   `[interactive]` instead and say why ("N complicated issues in this batch — better
+   confirmed one by one"). Then the effort tier ONCE (recommended from the `--list`
+   footer).
 
 4. **Fix loop** — sonar-issues-solve steps 4/5 verbatim (fallout sweep, phantom-fix
    guard, resolution.json), iterating ONLY the subset, announcing "issue i/N of the
