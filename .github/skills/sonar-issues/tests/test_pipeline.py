@@ -193,7 +193,7 @@ class GateTests(unittest.TestCase):
         self.assertEqual(code, 0, out)
         self.assertIn("mode     : github", out)
 
-    def test_02c_stats_report_and_attack_plan(self):
+    def test_02c_stats_report_and_roadmap(self):
         # fixtures tree (from test_01): S1068+S1481 are rec:sonar/eff:normal
         # (quick-wins slice), S2095 is the hard tail - no cluster reaches 3
         code, out = self.run_script("pick_issue.py", "--stats", "--fixtures",
@@ -202,9 +202,9 @@ class GateTests(unittest.TestCase):
         self.assertIn("unresolved: 3/3", out)
         self.assertIn("by rule:", out)
         self.assertIn("S1481", out)
-        self.assertIn("attack plan", out)
+        self.assertIn("fix roadmap", out)
         self.assertIn("/sonar-quick-wins", out)
-        self.assertIn("2 mechanical issue(s)", out)
+        self.assertIn("2 safe-fix issue(s)", out)
         self.assertIn("/sonar-issue-pick", out)
         self.assertIn("/sonar-verify", out)
         # resolved issues drop out of every count (clean up so later tests

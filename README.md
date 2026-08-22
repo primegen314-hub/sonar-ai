@@ -14,7 +14,7 @@ you're ready.
 ## The fast path
 
 1. `/sonar-init <sonar-url>` — one-time setup (Local | GitHub choice) + extract all issues
-   (big backlog? `/sonar-attack-plan` shows it grouped by rule with a suggested order)
+   (big backlog? `/sonar-roadmap` shows it grouped by rule with a suggested order)
 2. Fix — pick the right tool for the backlog size:
    - `/sonar-quick-wins` — auto-clear the easy majority (rec:sonar + low effort)
    - `/sonar-batch-fix 7-40` — a chosen chunk (selectors, ranges, a rule id, a severity)
@@ -33,7 +33,7 @@ Everything lives in the canonical home **[.github/skills/sonar-issues/](.github/
 | Doc | What's inside |
 |---|---|
 | [README](.github/skills/sonar-issues/README.md) | how to run it, what you need per mode, install, security |
-| [USECASE.md](USECASE.md) | the 200+-issue legacy-backlog playbook — report, attack plan, chunking rhythm |
+| [USECASE.md](USECASE.md) | the 200+-issue legacy-backlog playbook — report, fix roadmap, chunking rhythm |
 | [FLOWS.md](.github/skills/sonar-issues/FLOWS.md) | diagrams — the whole journey, every dropdown, per-skill flows |
 | [USAGE.md](.github/skills/sonar-issues/USAGE.md) | per-script runbook with real output |
 | [CONTEXT.md](CONTEXT.md) | the project's ubiquitous language |

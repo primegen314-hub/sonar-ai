@@ -55,7 +55,7 @@ always safe.
 | B9 | ☐ New `--discard-workspace` flag is accepted by every step | `python $SK/steps/s05_build_context.py --fixtures --branch demo --discard-workspace` | No argparse error (run_all forwards all flags to all steps) |
 | B10 | ☐ Old summaries (`"workflowMode": "remote"`) | keep a branch folder extracted before the rename → `pick_issue.py --list/--branches` | Shown as `mode: github`; workspace paths still resolve |
 | B11 | ☐ Quick compile check | `BUILD_COMMAND=echo ok` in `.env` → `python $SK/verify.py --compile --branch demo --fixtures` | Runs the command, prints COMPILES, exit 0; github mode exits 4; no BUILD_COMMAND + no derivable runner → exit 3 with guidance |
-| B12 | ☐ Backlog report + attack plan | `python $SK/pick_issue.py --stats --fixtures --branch demo` | `by rule:` rows (count, sev/rec/eff tallies), `attack plan` footer: quick-wins step (rec:sonar+eff:normal count), same-rule batch steps (clusters ≥3), hard tail by severity; resolved issues excluded from all counts; closing verify+commit line |
+| B12 | ☐ Backlog report + fix roadmap | `python $SK/pick_issue.py --stats --fixtures --branch demo` | `by rule:` rows (count, sev/rec/eff tallies), `fix roadmap` footer: quick-wins step (rec:sonar+eff:normal count), same-rule batch steps (clusters ≥3), hard tail by severity; resolved issues excluded from all counts; closing verify+commit line |
 
 ## C. Local mode, live — 🖐 needs your Sonar + a real checkout
 
@@ -105,7 +105,7 @@ always safe.
 | E13 | ☐ `/sonar-verify` offers cleanup | run a passing `--full` verify in local mode | After PASSED it offers `[keep] (Recommended when issues remain)` / `[cleanup]`; scoped runs and failures never offer it |
 | E14 | ☐ Honesty rule | watch any fix report/hand-off, especially on a smaller model | The AI never claims a fix "works"/"compiles"/"is correct" — only "edit applied" (with diff) and, after `/sonar-verify`, its actual result; hand-off suggests the quick compile check |
 | E15 | ☐ Anytime reference | with rules files PRESENT, paste a reference class mid-session | The AI extracts and follows its conventions for the session (reference wins on conflict) and offers to merge into `instructions.md` — no re-asking later |
-| E16 | ☐ `/sonar-attack-plan` | run it after init on a mixed tree | Shows the `--stats` report verbatim (never re-derived/reordered) + ONE menu: `[Start step 1] (Recommended)` / `[Just wanted the report]`; read-only — nothing fixed unless the user starts a step; the other skills are unchanged and never invoke or push it |
+| E16 | ☐ `/sonar-roadmap` | run it after init on a mixed tree | Shows the `--stats` report verbatim (never re-derived/reordered) + ONE menu: `[Start step 1] (Recommended)` / `[Just wanted the report]`; read-only — nothing fixed unless the user starts a step; the other skills are unchanged and never invoke or push it |
 
 ## F. Docs sanity — 🖐 manual, 2 minutes
 

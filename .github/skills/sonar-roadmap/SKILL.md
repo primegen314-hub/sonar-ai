@@ -1,9 +1,9 @@
 ---
-name: sonar-attack-plan
-description: Show the backlog report for a branch - unresolved Sonar issues grouped by rule - plus a pre-computed attack plan (quick wins, then same-rule batches, then the hard tail). Read-only - fixes nothing, changes nothing. Use right after /sonar-init on a big backlog, or when the user says "attack plan", "backlog report", "what should I fix first", or "how do I tackle all these issues".
+name: sonar-roadmap
+description: Show the backlog report for a branch - unresolved Sonar issues grouped by rule - plus a pre-computed fix roadmap (quick wins, then same-rule batches, then the hard tail). Read-only - fixes nothing, changes nothing. Use right after /sonar-init on a big backlog, or when the user says "roadmap", "backlog report", "what should I fix first", or "how do I tackle all these issues".
 ---
 
-# sonar-attack-plan `[branchRef | sonar-url]`
+# sonar-roadmap `[branchRef | sonar-url]`
 
 The battle-map skill: it shows WHERE the backlog is heavy and the fastest correct
 order through it — it never fixes anything itself and never launches another skill
@@ -28,7 +28,7 @@ numbered menu).
 
 2. **Run the report**:
    `python .github/skills/sonar-issues/pick_issue.py --stats --branch <branchRef>`
-   and show its output as-is — the by-rule table AND the numbered attack plan
+   and show its output as-is — the by-rule table AND the numbered fix roadmap
    (quick wins → same-rule batches → hard tail by severity, with the verify + commit
    gate line). Do NOT re-derive, reorder, or pad the plan — it is deterministic on
    purpose; you may add at most one line of context per step. No other reads: the

@@ -109,10 +109,10 @@ Shows `set_mode.py --show` output; switching to Local runs the script directly (
 nothing), switching to GitHub sends you to your own terminal for the hidden token
 prompt. Always reminds you to re-run `/sonar-init` after a switch (progress survives).
 
-## `/sonar-attack-plan` — the backlog report + suggested order (read-only)
+## `/sonar-roadmap` — the backlog report + suggested order (read-only)
 
 Runs `pick_issue.py --stats` (sample output in the pick_issue section below) and shows
-it verbatim: unresolved issues grouped by rule, then the attack plan — quick wins →
+it verbatim: unresolved issues grouped by rule, then the fix roadmap — quick wins →
 same-rule batches → hard tail by severity. One choice follows: `[Start step 1 now]
 (Recommended)` or `[Just wanted the report]`. It fixes nothing itself; every plan line
 is a copy-paste command. Full walkthrough: repo-root `USECASE.md`.
@@ -320,8 +320,8 @@ Sonar issue key).
 Exit codes: `0` found · `1` error · `2` `--next` found nothing (all resolved).
 
 `--stats` is the big-backlog report: unresolved issues grouped by rule, plus a
-deterministic **attack plan** (quick wins → same-rule batches → hard tail by severity).
-The dedicated `/sonar-attack-plan` skill presents it verbatim on request — it is never
+deterministic **fix roadmap** (quick wins → same-rule batches → hard tail by severity).
+The dedicated `/sonar-roadmap` skill presents it verbatim on request — it is never
 imposed on a solving session — see [USECASE.md](../../../USECASE.md) for the full
 200+-issue walkthrough:
 
@@ -332,8 +332,8 @@ by rule:
   S1068      x1    sev MAJOR:1 | rec sonar:1 | eff normal:1 | Remove this unused 'translateService' private field or ma...
   S1481      x1    sev MINOR:1 | rec sonar:1 | eff normal:1 | Remove this unused 'total' local variable.
   S2095      x1    sev BLOCKER:1 | rec sonar:1 | eff high:1 | Use try-with-resources or close this 'FileInputStream' in...
-attack plan (fastest correct order - verify + commit between steps):
-  1. /sonar-quick-wins                  - 2 mechanical issue(s) (rec:sonar + eff:normal) in one automated pass
+fix roadmap (fastest correct order - verify + commit between steps):
+  1. /sonar-quick-wins                  - 2 safe-fix issue(s) (rec:sonar + eff:normal) in one automated pass
   2. hard tail - 1 issue(s) one at a time, highest severity first: /sonar-issue-pick <seq> in this order: 3
 between steps: quick gate with /sonar-verify (--compile) and commit/publish the chunk.
 ```

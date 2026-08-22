@@ -50,9 +50,13 @@ The deterministic per-issue estimate of how big a fix really is: blast radius (`
 **Batch Fix**:
 Solving a chosen SUBSET of extracted issues in one session (`/sonar-batch-fix`) — named by selectors/ranges, a rule id, or a severity. The chunking strategy for large backlogs; ends with fixed / skipped / still-unresolved so progress stays visible.
 
-**Attack Plan**:
-The deterministic suggested fixing order for a backlog, computed by `pick_issue.py --stats` from the extracted data: Quick Wins first, then same-rule batches (3+ unresolved issues sharing a rule), then the hard tail one issue at a time by severity — with a verify + commit gate between steps. Surfaced only by the read-only `/sonar-attack-plan` skill (or the raw flag); other skills may mention it in one line but never impose it.
-_Avoid_: roadmap, strategy
+**Fix Roadmap**:
+The deterministic suggested fixing order for a backlog, computed by `pick_issue.py --stats` from the extracted data: Quick Wins first, then same-rule batches (3+ unresolved issues sharing a rule), then the hard tail one issue at a time by severity — with a verify + commit gate between steps. Surfaced only by the read-only `/sonar-roadmap` skill (or the raw flag); never imposed by any other skill.
+_Avoid_: attack plan, strategy
+
+**Safe-Fix Issue**:
+An issue the tooling can fix without engineering judgment: Recommended Fix is `sonar` (the rule ships a compliant example matching the file's language) AND AI Effort Tier is `normal` (the Complexity Score found no risk signals). The Quick Wins slice = all safe-fix issues.
+_Avoid_: mechanical, trivial
 
 **Quick Wins**:
 The low-effort slice of a backlog — unresolved issues with Recommended Fix `sonar` and AI Effort Tier `normal` — cleared in one automated pass (`/sonar-quick-wins`), leaving the harder remainder explicitly listed.

@@ -5,7 +5,7 @@ folder names, ask this script.
 
 Usage:
   python pick_issue.py --list            [--branch NAME]   all issues + solve status
-  python pick_issue.py --stats           [--branch NAME]   unresolved by rule + attack plan
+  python pick_issue.py --stats           [--branch NAME]   unresolved by rule + fix roadmap
   python pick_issue.py 3                 [--branch NAME]   by sequence number
   python pick_issue.py 003_S1481_Repo... [--branch NAME]   by folder name (prefix ok)
   python pick_issue.py AY8xKEY           [--branch NAME]   by Sonar issue key
@@ -114,7 +114,7 @@ def _tally(items, field):
 
 
 def print_stats(settings, summary, entries, mode):
-    """Unresolved issues grouped by rule, then a deterministic attack plan:
+    """Unresolved issues grouped by rule, then a deterministic fix roadmap:
     quick wins -> same-rule batches -> hard tail. The solving skills present
     this plan verbatim so no model has to re-derive it."""
     pending = [e for e in entries
@@ -151,11 +151,11 @@ def print_stats(settings, summary, entries, mode):
     tail = sorted((e for e in rest if e["seq"] not in clustered_seqs),
                   key=lambda e: (SEVERITY_RANK.get(e.get("severity"), 9), e["seq"]))
 
-    print("attack plan (fastest correct order - verify + commit between steps):")
+    print("fix roadmap (fastest correct order - verify + commit between steps):")
     step = 1
     if quick:
         print(f"  {step}. /sonar-quick-wins                  "
-              f"- {len(quick)} mechanical issue(s) (rec:sonar + eff:normal) in one automated pass")
+              f"- {len(quick)} safe-fix issue(s) (rec:sonar + eff:normal) in one automated pass")
         step += 1
     for rule_id, items in clusters:
         effs = _tally(items, "aiEffort")
@@ -207,7 +207,7 @@ def main():
     parser.add_argument("--branch", default=None, help="branch ref (default: current git branch)")
     parser.add_argument("--list", action="store_true", help="list every issue with solve status")
     parser.add_argument("--stats", action="store_true",
-                        help="unresolved issues grouped by rule + a suggested attack plan")
+                        help="unresolved issues grouped by rule + a suggested fix roadmap")
     parser.add_argument("--next", action="store_true", help="print the first unresolved issue")
     parser.add_argument("--branches", action="store_true",
                         help="list every extracted branch tree under SONAR_ISSUES/")

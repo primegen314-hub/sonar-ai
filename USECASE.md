@@ -2,7 +2,7 @@
 
 You inherited a legacy service. Sonar reports **240 issues** on your branch
 (`TASK-3487-report-cleanup`). Here is the fastest way through them with this
-toolkit that still keeps quality — the funnel: **report → mechanical passes →
+toolkit that still keeps quality — the funnel: **report → safe-fix passes →
 same-rule batches → hard tail**, with a verify + commit gate between every chunk.
 
 Never try to solve 240 issues in one session. Chunks keep every diff reviewable,
@@ -28,10 +28,10 @@ follows those conventions instead of 240 individually-plausible styles. Accept
 the offer to save it as `instructions.md` — future sessions pick it up
 automatically.
 
-## Step 2 — Get the report and the attack plan
+## Step 2 — Get the report and the fix roadmap
 
 ```bash
-/sonar-attack-plan
+/sonar-roadmap
 ```
 
 (or run the script directly: `python .github/skills/sonar-issues/pick_issue.py --stats`)
@@ -44,8 +44,8 @@ by rule:
   S3776      x18   sev CRITICAL:18      | rec ai:18    | eff max:15 high:3 | Refactor to reduce cognitive complexity...
   S2095      x6    sev BLOCKER:6        | rec ai:6     | eff high:6   | Close this resource...
   ...
-attack plan (fastest correct order - verify + commit between steps):
-  1. /sonar-quick-wins                  - 131 mechanical issue(s) in one automated pass
+fix roadmap (fastest correct order - verify + commit between steps):
+  1. /sonar-quick-wins                  - 131 safe-fix issue(s) in one automated pass
   2. /sonar-batch-fix S3776             - 18 issue(s), same rule - one chunk, one review
   3. hard tail - 9 issue(s) one at a time, highest severity first: /sonar-issue-pick ...
 between steps: quick gate with /sonar-verify (--compile) and commit/publish the chunk.
@@ -63,7 +63,7 @@ run yourself whenever you like.
 /sonar-quick-wins
 ```
 
-One automated pass over everything Sonar itself knows how to fix mechanically
+One automated pass over everything Sonar itself knows how to fix from its own recipe
 (`rec:sonar` + `eff:normal`): unused variables/fields/imports, redundant casts,
 literal duplication. No prompts per issue; failures are skipped and recorded,
 never forced. Then gate it:
@@ -83,7 +83,7 @@ than 18 issues of 18 different rules — you (and the AI) understand the rule on
 ```
 
 Pick `interactive` when the batch is complex (`eff:max`/`xMax` — confirm each
-diff), `automated` when it's mostly mechanical. After each batch: compile check,
+diff), `automated` when it is mostly safe-fix issues. After each batch: compile check,
 full `/sonar-verify` if the batch touched risky code, commit, next batch.
 Chunks of 30–50 issues are the sweet spot; a rule with 82 hits splits fine with
 ranges (`/sonar-batch-fix 1-40`, then `41-82`).
@@ -114,7 +114,7 @@ radius, co-changed files, tests) — no tier ever runs tests during solving.
 
 | Slice | Tool | Session size | Mode |
 |---|---|---|---|
-| Mechanical (40–60%) | `/sonar-quick-wins` | all at once | automated |
+| Safe-fix (40–60%) | `/sonar-quick-wins` | all at once | automated |
 | Same-rule clusters | `/sonar-batch-fix <rule>` | 30–50 per chunk | automated or interactive |
 | Hard tail | `/sonar-issue-pick <seq>` | one issue | interactive, high+ effort |
 
