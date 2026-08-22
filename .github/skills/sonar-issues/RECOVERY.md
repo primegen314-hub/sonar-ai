@@ -44,6 +44,7 @@ mapped action, and continue the skill where you left off. Iron rules:
 |---|---|
 | Exit 2 (no TEST_COMMAND, nothing detected) | The one-time test-command setup menu (let AI determine / type it / skip). |
 | Exit 3 (no testFiles for a scoped run) | Offer `--full` instead. |
+| Exit 3 from `--compile` (no BUILD_COMMAND, nothing derivable) | The user sets `BUILD_COMMAND` in the skill `.env` (their build/tsc command), or fall back to `--full`. |
 | Exit 4 (github mode) | By design — explain CI verifies after publish. Not an error. |
 | Tests FAILED | The 4-option user menu (bisect recommended). NEVER debug without the user picking `investigate`. |
 

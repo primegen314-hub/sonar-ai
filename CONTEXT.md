@@ -60,7 +60,7 @@ Solving one issue at a time: brief shown, user picks Sonar Suggestion / AI fix /
 Solving all unresolved issues without pausing; failures are skipped-and-recorded. No tests run — Verify is a separate step.
 
 **Style Snapshot**:
-Reference code the user optionally supplies when no instruction files exist (`rules:` line says none found) — offered once per session, skippable. Given as pasted code or as comma-separated file names resolved from the repo (max 3 files). The solving AI matches its conventions and, with consent, distills them into a root-level `instructions.md`, turning the snapshot into a permanent detected rules file.
+Reference code the user supplies as the style/conventions authority — proactively offered once per session when no instruction files exist (`rules:` line says none found), and honored ANYTIME the user volunteers one (even when rules files exist; the explicit reference wins on conflict for that session). Given as pasted code, comma-separated repo file names (max 3), or framework skills/examples. The solving AI matches its conventions and, with consent, distills them into a root-level `instructions.md`, turning the snapshot into a permanent detected rules file.
 
 **Fallout Sweep**:
 The mandatory completeness pass after every fix (all fix paths, including mechanical Sonar Suggestions): clean up damage the edit itself caused — unused imports/locals/params, dead references, dangling javadoc, empty try/catch shells. Litmus test: anything a Sonar re-scan would newly flag as a direct result of the edit belongs to the fix. Strictly bounded: never touches pre-existing neighbors.

@@ -8,6 +8,10 @@ Usage:
   python verify.py --full                [--branch NAME]   whole test suite
   python verify.py --issue <selector>    [--branch NAME]   only that issue's testFiles
                                                            (selector = seq | folder prefix | Sonar key)
+  python verify.py --compile             [--branch NAME]   quick compile-only check (seconds):
+                                                           BUILD_COMMAND, else derived from the
+                                                           detected runner - catches broken builds
+                                                           without running any tests
   python verify.py --set-command "<cmd>"                   persist TEST_COMMAND into the
                                                            skill .env (asked once, reused forever)
 
@@ -71,6 +75,26 @@ def stem(path):
     return path.replace("\\", "/").rsplit("/", 1)[-1].rsplit(".", 1)[0]
 
 
+def compile_command(settings):
+    """Cheapest command that proves the code still builds, or (None, why-not)."""
+    if settings.build_command:
+        return settings.build_command, None
+    kind, _ = detect_runner(settings.repo_root)
+    if kind == "maven":
+        mvn = "mvnw.cmd" if (os.name == "nt" and os.path.exists(os.path.join(settings.repo_root, "mvnw.cmd"))) else \
+              "./mvnw" if os.path.exists(os.path.join(settings.repo_root, "mvnw")) else "mvn"
+        return f"{mvn} -B compile", None
+    if kind == "gradle":
+        gradle = "gradlew.bat" if (os.name == "nt" and os.path.exists(os.path.join(settings.repo_root, "gradlew.bat"))) else \
+                 "./gradlew" if os.path.exists(os.path.join(settings.repo_root, "gradlew")) else "gradle"
+        return f"{gradle} classes", None
+    if kind == "pytest":
+        return f"{os.path.basename(sys.executable)} -m compileall -q .", None
+    return None, ("no BUILD_COMMAND in the skill .env and no compile step derivable "
+                  f"for runner '{kind or 'unknown'}' - set BUILD_COMMAND (e.g. your "
+                  "build/tsc/lint command) or use --full instead")
+
+
 def find_issue_folder(settings, selector):
     summary_path = os.path.join(settings.branch_dir, "summary.json")
     if not os.path.isfile(summary_path):
@@ -103,13 +127,15 @@ def main():
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--full", action="store_true", help="run the whole test suite")
     parser.add_argument("--issue", default=None, help="run only this issue's testFiles")
+    parser.add_argument("--compile", dest="compile_only", action="store_true",
+                        help="quick compile-only check (no tests)")
     parser.add_argument("--branch", default=None, help="branch ref (default: current git branch)")
     parser.add_argument("--set-command", default=None, metavar="CMD",
                         help="persist CMD as TEST_COMMAND in the skill .env, then exit")
     parser.add_argument("--fixtures", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args()
     args.url = None  # Settings expects it
-    if not args.full and not args.issue and not args.set_command:
+    if not args.full and not args.issue and not args.set_command and not args.compile_only:
         parser.print_help()
         sys.exit(2)
 
@@ -127,6 +153,18 @@ def main():
              "would test the UNFIXED code. Verify after publishing instead: let CI test "
              "the pushed branch, or pull the published branch locally and run the tests "
              "there.", code=4)
+
+    if args.compile_only:
+        command, why_not = compile_command(settings)
+        if command is None:
+            fail(f"[verify] --compile: {why_not}", code=3)
+        print(f"[verify] compile-only check (no tests)")
+        code = run(command, settings.repo_root)
+        if code == 0:
+            ok("[verify] COMPILES")
+        else:
+            print(f"[verify] COMPILE FAILED (exit {code})", file=sys.stderr)
+        sys.exit(code)
 
     kind = None
     if settings.test_command:

@@ -54,6 +54,7 @@ always safe.
 | B8 | ☐ `--set-command` allowed in GitHub mode | github `.env` → `python $SK/verify.py --set-command "mvn -B test"` | Saved to `.env` (only running tests is blocked in GitHub mode, not configuring them) |
 | B9 | ☐ New `--discard-workspace` flag is accepted by every step | `python $SK/steps/s05_build_context.py --fixtures --branch demo --discard-workspace` | No argparse error (run_all forwards all flags to all steps) |
 | B10 | ☐ Old summaries (`"workflowMode": "remote"`) | keep a branch folder extracted before the rename → `pick_issue.py --list/--branches` | Shown as `mode: github`; workspace paths still resolve |
+| B11 | ☐ Quick compile check | `BUILD_COMMAND=echo ok` in `.env` → `python $SK/verify.py --compile --branch demo --fixtures` | Runs the command, prints COMPILES, exit 0; github mode exits 4; no BUILD_COMMAND + no derivable runner → exit 3 with guidance |
 
 ## C. Local mode, live — 🖐 needs your Sonar + a real checkout
 
@@ -101,6 +102,8 @@ always safe.
 | E11 | ☐ `/sonar-quick-wins` | run on a tree with mixed rec:/eff: values | Only `rec:sonar` + `eff:normal` issues are touched; "left for you" lists every remaining unresolved issue with its flags |
 | E12 | ☐ Recommended + descriptions on EVERY menu | watch any session's choices (mode, fix approach, effort tier, verify failure, cleanup) | Each menu marks exactly one option `(Recommended)` listed first with a one-line why, and every option carries a one-line what-happens description |
 | E13 | ☐ `/sonar-verify` offers cleanup | run a passing `--full` verify in local mode | After PASSED it offers `[keep] (Recommended when issues remain)` / `[cleanup]`; scoped runs and failures never offer it |
+| E14 | ☐ Honesty rule | watch any fix report/hand-off, especially on a smaller model | The AI never claims a fix "works"/"compiles"/"is correct" — only "edit applied" (with diff) and, after `/sonar-verify`, its actual result; hand-off suggests the quick compile check |
+| E15 | ☐ Anytime reference | with rules files PRESENT, paste a reference class mid-session | The AI extracts and follows its conventions for the session (reference wins on conflict) and offers to merge into `instructions.md` — no re-asking later |
 
 ## F. Docs sanity — 🖐 manual, 2 minutes
 

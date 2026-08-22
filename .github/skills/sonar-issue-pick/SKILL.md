@@ -92,6 +92,12 @@ applying any fix:
 - From the rest, skim ONLY the ones plausibly relevant to this fix (coding style,
   bug-fixing conventions, code structure) — and follow them; never violate project
   standards with a fix.
+**User-offered reference, ANYTIME**: if the user volunteers reference material at any
+point — pasted code, comma-separated repo files (max 3), or framework skills/examples —
+treat it as a Style Snapshot even when rules files exist: extract its conventions,
+follow them (the user's explicit reference wins on conflict this session), and offer to
+merge the distilled conventions into `instructions.md`.
+
 - `(none found)` → ask ONCE per session (never again after any answer):
   `[Paste a reference class OR name reference files (comma-separated)] · [skip] (both fine)`.
   The user may paste code directly, or answer with comma-separated file names/paths
@@ -173,6 +179,11 @@ runs tests:
    test: *would a Sonar re-scan flag something NEW as a direct result of my edit?* If
    yes, it is part of THIS fix. Hard bound: never extend beyond direct fallout —
    pre-existing problems nearby are their own issues. Mention swept items in the report.
+   Finish with a **syntax sanity pass**: re-read the full edited region once and
+   confirm it is syntactically whole — balanced braces/brackets/parens, every remaining
+   reference resolves, nothing still points at a removed symbol. **Honesty rule**:
+   never state a fix "works", "compiles", or "is correct" — only "edit applied" (diff
+   shown) and, later, `/sonar-verify`'s actual result.
 
 7. **Prove the edit landed (phantom-fix guard)** before recording anything:
    - Local mode: run `git diff --stat -- <file>` (one fast command) and show the

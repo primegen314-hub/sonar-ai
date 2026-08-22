@@ -99,6 +99,13 @@ instruction files it found (CLAUDE.md, .github/copilot-instructions.md, AGENTS.m
 - Skip files your host already auto-loaded (e.g. Claude Code loads CLAUDE.md itself).
 - From the rest, skim only what is relevant to fixing code (style, bug-fix conventions,
   structure) and apply those standards to every fix in the session.
+**User-offered reference, ANYTIME**: if the user volunteers reference material at any
+point — pasted code, comma-separated repo files (max 3), or framework skills/examples
+(e.g. Angular reference classes) — treat it as a Style Snapshot even when rules files
+exist: extract its conventions, follow them for the rest of the session (on conflict
+with found rules files, the user's explicit reference wins for this session), and offer
+to merge the distilled conventions into `instructions.md`.
+
 - `(none found)` → ask ONCE per session (never again after any answer):
   `[Paste a reference class OR name reference files (comma-separated)] · [skip] (both fine)`.
   The user may paste code directly, or answer with comma-separated file names/paths
@@ -174,7 +181,12 @@ instruction files it found (CLAUDE.md, .github/copilot-instructions.md, AGENTS.m
      after a removal. Litmus test: *would a Sonar re-scan flag something NEW as a
      direct result of my edit?* If yes, it is part of THIS fix. Hard bound: never
      extend beyond direct fallout — pre-existing problems nearby are their own issues.
-     Mention swept items in the fix report line.
+     Mention swept items in the fix report line. Finish the sweep with a **syntax
+     sanity pass**: re-read the full edited region once and confirm it is
+     syntactically whole — balanced braces/brackets/parens, every remaining reference
+     resolves, nothing still points at a symbol you removed. **Honesty rule**: never
+     state a fix "works", "compiles", or "is correct" — the only permitted claims are
+     "edit applied" (with the diff shown) and, later, `/sonar-verify`'s actual result.
    - **Prove the edit landed (phantom-fix guard)** before recording anything:
      - Local mode: run `git diff --stat -- <file>` (one fast command) and show the
        one-line result. An empty diff means the fix did NOT land — retry the edit;
@@ -212,9 +224,10 @@ instruction files it found (CLAUDE.md, .github/copilot-instructions.md, AGENTS.m
    Remind the user Sonar clears the issues only after the branch is re-analyzed (CI).
 
 7. **Hand-off** (never skip this message):
-   - **Local mode**: "All fixes are applied to your checkout but UNTESTED — run
-     `/sonar-verify` when you're ready (it runs the project's tests and helps you bisect
-     any failure per issue)."
+   - **Local mode**: "All fixes are applied to your checkout but UNVERIFIED — for a
+     quick confidence check run `/sonar-verify` with the compile-only option (seconds),
+     and run the full `/sonar-verify` before shipping (it runs the project's tests and
+     helps you bisect any failure per issue)."
    - **GitHub mode**: "The fixes live only in the scratch workspace — your checkout is
      untouched. Next step: `/publish-to-github` (it previews the patch and pushes after
      your explicit confirmation). Tests run in CI on the pushed branch."

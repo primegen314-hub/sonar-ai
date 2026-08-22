@@ -363,8 +363,13 @@ branch; `--set-command` still works) · otherwise the runner's exit code.
 ```bash
 python .github/skills/sonar-issues/verify.py --full   --branch demo    # whole suite (the normal /sonar-verify run)
 python .github/skills/sonar-issues/verify.py --issue 2 --branch demo   # only issue #2's testFiles (bisecting a failure)
+python .github/skills/sonar-issues/verify.py --compile --branch demo   # compile-only, seconds: BUILD_COMMAND or derived (mvn compile / gradlew classes / compileall)
 python .github/skills/sonar-issues/verify.py --set-command "mvn -pl core -am test"   # persist TEST_COMMAND once
 ```
+
+`--compile` is the cheap sanity check right after a solving session — it catches
+"the fix doesn't even build" (a failure smaller models won't admit to) without paying
+for a test run. Exit 3 = nothing derivable: set `BUILD_COMMAND` in the skill `.env`.
 
 ```text
 $ python .github/skills/sonar-issues/verify.py --issue 2 --branch demo

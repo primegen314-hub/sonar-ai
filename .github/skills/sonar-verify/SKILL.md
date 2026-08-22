@@ -58,6 +58,13 @@ dash) — a menu missing either is a defect.
    - No selector (the normal case): `python .github/skills/sonar-issues/verify.py --full --branch <branchRef>`.
    - Selector given (bisecting one issue): `python .github/skills/sonar-issues/verify.py --issue <selector> --branch <branchRef>`
      (scoped to that issue's `testFiles`; exit 3 = no tests known for it — offer `--full`).
+   - User asked for a quick check (or wants confidence right after a solving session
+     without the full suite's cost):
+     `python .github/skills/sonar-issues/verify.py --compile --branch <branchRef>` —
+     compile-only, seconds: `BUILD_COMMAND`, else derived from the detected runner
+     (maven `compile` / gradle `classes` / python `compileall`). Exit 3 = nothing
+     derivable — the one-time setup below can set `BUILD_COMMAND`, or fall back to
+     `--full`. Catches "the fix doesn't even build" without running a single test.
 
    **One-time test-command setup** — when verify exits 2 (no `TEST_COMMAND` configured
    and auto-detection found nothing), offer:

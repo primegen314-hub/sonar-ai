@@ -197,6 +197,19 @@ class GateTests(unittest.TestCase):
                                     "--fixtures", env_lines=self.GITHUB_ENV)
         self.assertEqual(code, 4, out)
 
+    def test_03b_verify_compile_only(self):
+        # BUILD_COMMAND set: quick compile check passes without any tests
+        code, out = self.run_script(
+            "verify.py", "--compile", "--branch", "demo", "--fixtures",
+            env_lines=["WORKFLOW_MODE=local", "CONTEXT_SOURCE=local",
+                       "BUILD_COMMAND=echo build-ok"])
+        self.assertEqual(code, 0, out)
+        self.assertIn("COMPILES", out)
+        # github mode still refuses by design
+        code, out = self.run_script("verify.py", "--compile", "--branch", "demo-r",
+                                    "--fixtures", env_lines=self.GITHUB_ENV)
+        self.assertEqual(code, 4, out)
+
     def test_04_publish_refuses_in_local_mode_exit_2(self):
         code, out = self.run_script(
             "publish.py", "--branch", "demo", "--fixtures",
