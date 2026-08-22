@@ -10,9 +10,10 @@ no time estimate at all) and the skills spend zero tokens deriving it.
 Tiers are ANALYSIS depth for the solving AI. No tier ever runs tests -
 verification is a separate, user-invoked step (/sonar-verify):
   normal  minimal fix at the flagged lines
-  high    + impact check of usedBy files, edge cases
-  max     + read the whole issue file and related files, weigh alternative fixes,
-            extend the affected tests
+  high    + impact check of usedBy files, targeted skim of the relatedFiles
+            relevant to this fix, edge cases
+  max     + read the whole issue file and ALL related files in depth, weigh
+            alternative fixes, extend the affected tests
   xMax    + adversarial self-review of the diff before recording the resolution
 """
 import re

@@ -121,8 +121,8 @@ runs tests:
 | Tier | The AI must... |
 |---|---|
 | **normal** | Minimal fix at the flagged lines only. Standard read path. |
-| **high** | + check every `usedBy` file when the fix touches an API/signature; handle edge cases. |
-| **max** | + may read the whole issue file and `relatedFiles`; weigh alternative fixes; extend the affected tests when coverage is thin. |
+| **high** | + check every `usedBy` file when the fix touches an API/signature; skim the `relatedFiles` relevant to THIS fix (its tests, direct users) for context; handle edge cases. |
+| **max** | + read the whole issue file and ALL `relatedFiles` in depth; weigh alternative fixes; extend the affected tests when coverage is thin. |
 | **xMax** | + adversarial self-review of the diff before recording the resolution. |
 
 ## Steps

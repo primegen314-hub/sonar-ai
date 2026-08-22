@@ -148,8 +148,9 @@ confirm in chat, the AI always runs `publish.py` with `--yes` — agent terminal
 interactive stdin, so the script's own prompt cannot run there (exit 2 says exactly that).
 
 **AI effort tiers** (analysis depth only — no tier runs tests): `normal` = minimal fix ·
-`high` = + usedBy impact check + edge cases · `max` = + reads related files, weighs
-alternatives, extends tests · `xMax` = + adversarial self-review of the diff.
+`high` = + usedBy impact check + targeted skim of this fix's related files + edge cases ·
+`max` = + whole file and ALL related files in depth, weighs alternatives, extends tests ·
+`xMax` = + adversarial self-review of the diff.
 
 ---
 
