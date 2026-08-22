@@ -92,11 +92,16 @@ applying any fix:
 - From the rest, skim ONLY the ones plausibly relevant to this fix (coding style,
   bug-fixing conventions, code structure) — and follow them; never violate project
   standards with a fix.
-**User-offered reference, ANYTIME**: if the user volunteers reference material at any
-point — pasted code, comma-separated repo files (max 3), or framework skills/examples —
-treat it as a Style Snapshot even when rules files exist: extract its conventions,
-follow them (the user's explicit reference wins on conflict this session), and offer to
-merge the distilled conventions into `instructions.md`.
+## User-supplied reference & rich context (anytime — highest priority)
+
+The user can feed reference material at ANY point, with or without instruction files
+present: a pasted "perfect snapshot" class, comma-separated repo files (max 3),
+framework skills/docs/examples, or plain domain notes. Authoritative for the session on
+BOTH levels — **style** (naming, logging, error handling, idioms) and **implementation**
+(which framework APIs/patterns the fix should use). Priority on conflict:
+**user reference > found rules files > your defaults.** Offer to merge the distilled
+guidance into `instructions.md` (guidance only, never their code verbatim). Never
+ignore or "balance away" supplied reference material.
 
 - `(none found)` → ask ONCE per session (never again after any answer):
   `[Paste a reference class OR name reference files (comma-separated)] · [skip] (both fine)`.

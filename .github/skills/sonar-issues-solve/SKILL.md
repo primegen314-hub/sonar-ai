@@ -99,12 +99,22 @@ instruction files it found (CLAUDE.md, .github/copilot-instructions.md, AGENTS.m
 - Skip files your host already auto-loaded (e.g. Claude Code loads CLAUDE.md itself).
 - From the rest, skim only what is relevant to fixing code (style, bug-fix conventions,
   structure) and apply those standards to every fix in the session.
-**User-offered reference, ANYTIME**: if the user volunteers reference material at any
-point — pasted code, comma-separated repo files (max 3), or framework skills/examples
-(e.g. Angular reference classes) — treat it as a Style Snapshot even when rules files
-exist: extract its conventions, follow them for the rest of the session (on conflict
-with found rules files, the user's explicit reference wins for this session), and offer
-to merge the distilled conventions into `instructions.md`.
+## User-supplied reference & rich context (anytime — highest priority)
+
+The user can feed reference material at ANY point in the session, with or without
+instruction files present, in any form: a pasted "perfect snapshot" class,
+comma-separated repo file names (max 3), framework skills/docs/examples (e.g. Angular
+reference components), or plain domain notes ("we use standalone components, signals
+over RxJS where possible"). Treat it as authoritative for the REST of the session, on
+two levels:
+- **Style**: naming, logging, error handling, formatting, idioms — every fix matches it.
+- **Implementation**: which framework APIs and patterns fixes should use — when the
+  reference shows how this team writes (say) Angular, fixes follow that way, not your
+  generic training default.
+Priority on conflict: **user reference > found rules files > your defaults.** At a
+natural pause, offer `[Merge the distilled guidance into instructions.md]` so it
+becomes permanent (conventions/guidance only, never their code verbatim). Never ignore
+or "balance away" supplied reference material — the user feeding context is the point.
 
 - `(none found)` → ask ONCE per session (never again after any answer):
   `[Paste a reference class OR name reference files (comma-separated)] · [skip] (both fine)`.
